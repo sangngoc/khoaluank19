@@ -29,7 +29,6 @@ def data_pre(cau_tra_loi):
             cau_co_1_stopword=cau_bo_stopword +" "+ check
     return cau_co_1_stopword
 
-
 def getData(folder_path):
     global data, data_tmp
     data=[]
@@ -131,7 +130,7 @@ def search3(query, documents, doc_tmp):
     return r3[0]
 @app.route("/")
 def home():
-    return render_template("index2.html")
+    return render_template("index.html")
 
 @app.route("/get2")
 def get_bot_response():

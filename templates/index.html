@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Chat Interface</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+	<!-- Latest compiled JavaScript -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div>
+			<h1 class="text-center mt-3">Ứng dụng ChatBot tư vấn luật lao động Việt Nam</h1>
+			<h3 class="text-center">Phạm Nguyễn Minh Phúc - Trần Ngọc Sáng</h3>
+		</div>
+		<div class="row">
+			<div class="col-sm"></div>
+			<div class="col-12 col-sm-12 col-md-6">
+				<div class="chat-box" id="chatbox">
+					<div class="message from-others">
+						<p>Chào bạn tôi là ChatBot tư vấn luật</p>
+					</div>	
+				</div>
+
+				<div id="reButton" class="rButton">
+					<button id="ReButton" type="submit">Reresponse</button>
+				</div>
+
+				<div class="input-box" id="userInput">
+					<input id="textInput" type="text" name="msg" placeholder="Type your message here">
+					<button id="buttonInput" type="submit">Send</button>
+				</div>
+			</div>
+			<div class="col-sm"></div>
+		</div>
+	</div>
+
+    
+    <script>
+        function getBotResponse() {
+			let scroll_to_bottom = document.getElementById('chatbox');
+			var rawText = $("#textInput").val();
+			var userHtml = '<div class="message from-me"><p>' + rawText + '</p></div>';
+			$("#textInput").val("");
+			$("#chatbox").append(userHtml);
+			scroll_to_bottom.scrollTop = scroll_to_bottom.scrollHeight;
+
+			$.get("/get2", { smsg: rawText }).done(function(data) {
+				var botHtml = '<div class="message from-others"><p>' + data + '</p></div>';
+				$("#chatbox").append(botHtml);
+				document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+				scroll_to_bottom.scrollTop = scroll_to_bottom.scrollHeight;
+          	});
+			document.getElementById("reButton").style.visibility = "visible";
+        }
+
+		function getBot_Re(){
+			let scroll_to_bottom = document.getElementById('chatbox');
+			scroll_to_bottom.scrollTop = scroll_to_bottom.scrollHeight;
+			var botHtml = '<div class="message from-others"><p>tải lại</p></div>';
+			$.get("/get3").done(function(data) {
+				var botHtml = '<div class="message from-others"><p>' + data + '</p></div>';
+				$("#chatbox").append(botHtml);
+				document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+				scroll_to_bottom.scrollTop = scroll_to_bottom.scrollHeight;
+          	});
+		}
+
+		
+        $("#textInput").keypress(function(e) {
+            if(e.which == 13) {
+                getBotResponse();
+            }
+        });
+        $("#buttonInput").click(function() {
+          	getBotResponse();
+        })
+
+		$("#ReButton").click(function() {
+          	getBot_Re();
+        })
+      </script>
+</body>
+</html>
